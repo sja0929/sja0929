@@ -1,0 +1,157 @@
+Design a Car Rental System
+
+
+User can
+
+1. Login App
+
+2. Rent a Car
+
+3. Review order
+
+4. Contact Car Rental Company
+
+5. Cancel
+
+
+
+----------------------------------------------------------------------------------------------------------------------
+
+Class: User
+
+Data: name, phone, driverLicense, order
+
+Behaviour:
+
+loginApp() {
+
+	App.login(name);
+
+}
+
+rentCar() {
+
+if(driverLicense.licenseAvailable())
+
+		App.match(this.Data);
+
+	else
+
+		Error;
+
+}
+
+review() {
+
+	System.out.print(this.order);
+
+}
+
+contactCompany() {
+
+	HelpService.call(order.company.Data.phone);
+
+}
+
+cancel() {
+
+	App.orderEnd();
+
+}
+
+
+
+----------------------------------------------------------------------------------------------------------------------
+
+Class: Company
+
+Data: name, phone, driverLicence, order,giveKey
+
+Behaviour:
+
+confirmOrder(userName) {
+
+	System.out.print(userName);
+
+	if(confirm)  return true;
+
+	else return false;
+
+}
+
+contactUser() {
+
+	HelpService.call(order[‘userData’].phone);
+
+}
+
+giveKey() {
+
+	App.orderEnd();
+
+}
+
+
+
+----------------------------------------------------------------------------------------------------------------------
+
+Class: App
+
+Data: status
+
+Behaviour:
+
+login(userName) {
+
+	List<String> nameList;
+
+	foreach(String name in nameList) {
+
+		if(userName == name)
+
+status = true;
+
+}
+
+status = false;
+
+}
+
+
+
+----------------------------------------------------------------------------------------------------------------------
+
+Class: CreditCard
+
+Data: type, bankName, cardNumber, address, securityCode, expireDate
+
+Behaviour:
+
+cardAvailable() {
+
+	Date currentDate = new Date();
+
+return currentDate.compareTo(expireDate);
+
+}
+
+
+
+----------------------------------------------------------------------------------------------------------------------
+
+
+
+----------------------------------------------------------------------------------------------------------------------
+
+Class: HelpService
+
+Data: phone
+
+Behaviour:
+
+call(phone) {
+
+	phoneCallAPI.call(phone);
+
+}
+
