@@ -140,6 +140,415 @@ return currentDate.compareTo(expireDate);
 ----------------------------------------------------------------------------------------------------------------------
 
 
+Class: HelpService
+
+Data: phone
+
+Behaviour:
+
+call(phone) {
+
+	phoneCallAPI.call(phone);
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+Design a Traffic Controller System for a Junction
+
+
+User can
+
+
+1.Ask for a green light
+
+
+----------------------------------------------------------------------------------------------------------------------
+
+
+Class: User
+
+
+Data: button, colorRed, colorGreen
+
+
+Behaviour:
+
+
+AskforGreenLight() {
+
+
+if(button.buttonPressed())
+
+
+		Set.Color (Color Green);
+
+
+	else
+
+
+		Set.Color (Color Red); 
+
+
+
+
+----------------------------------------------------------------------------------------------------------------------
+
+
+Class: Light
+
+
+Data: Timer, colorRed, colorGreen
+
+
+Behaviour:
+
+
+changeLight(){
+
+
+Int timer = 0;
+
+
+For ( timer = 1; timer > 0; timer ++){
+
+If ( timer % 60 == 0 ){
+
+Set. Color ( Color Red );
+
+}
+
+Else
+
+Set Color (Color Green);
+
+}
+
+
+Return Color;
+
+}
+
+
+
+
+
+
+
+
+
+Design a Course Registration Platform
+
+User can
+
+1. Login Website
+
+2. Add a Course
+
+3. Drop a Course
+
+4. Contact Advisor
+
+----------------------------------------------------------------------------------------------------------------------
+
+Class: User
+
+Data: name, ID, CourseNumber, Schedule 
+
+Behaviour:
+
+loginApp() {
+
+	App.login(name);
+
+}
+
+addCourse() {
+
+if(Course.CourseNumberAvailable())
+
+		App.add(this.Data);
+
+	else
+
+		Error;
+
+}
+
+dropCourse() {
+
+if(Course.CourseNumberAvailable())
+
+		App.remove(this.Data);
+
+	else
+
+		Error;
+
+}
+
+contactAdvisor() {
+
+	Adviosr.call(schedule.name, ID, CourseNumber);
+
+}
+
+
+
+
+----------------------------------------------------------------------------------------------------------------------
+
+
+Class: Website
+
+Data: status
+
+Behaviour:
+
+login(userName) {
+
+	List<String> nameList;
+
+	foreach(String name in nameList) {
+
+		if(userName == name)
+
+status = true;
+
+}
+
+status = false;
+
+}
+
+
+
+----------------------------------------------------------------------------------------------------------------------
+
+Class: Advisor
+
+Data: phone
+
+Behaviour:
+
+call(phone) {
+
+	phoneCallAPI.call(phone);
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Design a vending Machine (will accept coins of different denominations and vends out candies, soda etc)
+
+User can
+
+1. Choose items
+
+2. Pay for it
+
+3. Contact HelpService
+
+----------------------------------------------------------------------------------------------------------------------
+
+Class: User
+
+Data: 
+
+Behaviour:
+
+chooseItems() {
+
+System.out.println(“Please choose items”);
+
+Scanner scanner = new Scanner (System.in);
+
+Int x = scanner.nextInt();
+
+Return x;
+
+}
+
+
+
+----------------------------------------------------------------------------------------------------------------------
+
+
+
+
+Class: CreditCard
+
+Data: type, expireDate
+
+Behaviour:
+
+cardAvailable() {
+
+	Date currentDate = new Date();
+
+return currentDate.compareTo(expireDate);
+
+
+}
+
+
+----------------------------------------------------------------------------------------------------------------------
+
+
+
+Class: HelpService
+
+Data: phone
+
+Behaviour:
+
+call(phone) {
+
+	phoneCallAPI.call(phone);
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Design a Parking lot
+
+
+User can
+
+1.Input the number they are parking 
+
+
+2.Make a Payment
+
+
+3.Contact HelpService
+
+
+
+
+----------------------------------------------------------------------------------------------------------------------
+
+Class: User
+
+Data: 
+
+Behaviour:
+
+InputNumber() {
+
+System.out.println(“Which spot are you parking in”);
+
+Scanner scanner = new Scanner (System.in);
+
+Int x = scanner.nextInt();
+
+Return x;
+
+}
+
+
+----------------------------------------------------------------------------------------------------------------------
+
+Class: CreditCard
+
+Data: type, expireDate
+
+Behaviour:
+
+cardAvailable() {
+
+	Date currentDate = new Date();
+
+return currentDate.compareTo(expireDate);
+
+
+}
+
 
 ----------------------------------------------------------------------------------------------------------------------
 
@@ -154,4 +563,7 @@ call(phone) {
 	phoneCallAPI.call(phone);
 
 }
+
+
+
 
