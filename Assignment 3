@@ -1,4 +1,4 @@
-Q1- Q7
+Q1-Q7
 
 Still working on Q8
 
@@ -6,20 +6,19 @@ public class Assignment 3
 {
 	public static void main(String[] args)
 	{
-		Methods qishenli = new Methods();
-		for(int i=1;i<=11;i++)
+		Course a = new Course(1);
+		a.registerStudent(1);
+		a.registerStudent(2);
+		a.registerStudent(200);
+		int[] testing = a.getStudentIds();
+		for(int i=0;i<testing.length;i++)
 		{
-			System.out.println(qishenli.countAndSay(i));
+		System.out.print(testing[i]+" ");
 		}
-		System.out.println();
-		System.out.println(qishenli.reverseString("World Is Good Enough To Fight"));
-		int[][] hello = {{1,2,3},{3,4,3},{5,6,7},{2,5,4}};
-		int[] hello2;
-		hello2 = qishenli.spiralOrder(hello);
-		for(int i=0;i<hello2.length;i++)
-				System.out.println(hello2[i]);
 	}
+
 }
+
 class Methods
 {
 	public int[] spiralOrder(int[][] matrix)
@@ -155,10 +154,16 @@ class Course
 	int maxCapacity;
 	int professorId;
 	int credits;
-	int[] studentIds;
-	public void registerStudent(int[] studentIds)
+	int[] studentIds = new int[0];
+	public void registerStudent(int studentId)
 	{
-			this.studentIds = studentIds;
+		int[] returnArray = new int[this.studentIds.length+1];
+		for(int i = 0;i<this.studentIds.length;i++)
+		{
+			returnArray[i]=this.studentIds[i];
+		}
+		returnArray[returnArray.length-1] = studentId;
+		studentIds = returnArray;
 	}
 	public int[] removeDuplicates(int[] studentIds){
 		int arrayLength = studentIds.length;
@@ -191,6 +196,10 @@ class Course
 		this.studentIds = studentIdsreturn;
 		return this.studentIds;
 	}
+	public int[] getStudentIds()
+	{
+	return this.studentIds; 
+	}
 	public int groupsOfStudents(int[] studentIds){
 		int count = 0;
 		for(int i=0;i<studentIds.length-1;i++)
@@ -215,8 +224,14 @@ class Course
 	}
 		public Course(int courseId,int professorId,int credits)
 	{
+		if(courseId <=0)
+			System.out.println("courseIdError");
 		this.courseId = courseId;
+		if(professorId< 100000 || professorId >999999)
+			System.out.println("professorIdError");
 		this.professorId = professorId;
+		if(credits>10 || credits <=0)
+			System.out.println("creditsError");
 		this.credits = credits;
 	}
 	public int getCourseId()
@@ -236,7 +251,10 @@ class Course
 	}
 	public void setProfessorId(int professorId)
 	{
-		this.professorId = professorId;
+		if(professorId< 100000 || professorId >999999)
+			System.out.println("professorIdError");
+		else
+			this.professorId = professorId;
 	}
 	public String getcourseName()
 	{
@@ -245,7 +263,7 @@ class Course
 	public void setcourseName(String courseName)
 	{
 		if(courseName.length()<=60 && courseName.length()>=10)
-		this.courseName = courseName;
+			this.courseName = courseName;
 		else
 		System.out.println("Not valid");
 	}
@@ -255,7 +273,10 @@ class Course
 	}
 	public void setMaxCapacity()
 	{
+		if(maxCapacity >=10 && maxCapacity <=100)
 		this.maxCapacity = maxCapacity;
+		else
+		System.out.println("Not Valid");
 	}
 	public int getCredits()
 	{
@@ -268,49 +289,9 @@ class Course
 	    else
 	    System.out.println("Not Valid");
 	}
+} 
 
-	static void spiralPrint(int m, int n, int a[][]) 
-  	{ 
-        int i, k = 0, l = 0; 
-        /*  k - starting row index 
-        m - ending row index 
-        l - starting column index 
-        n - ending column index 
-        i - iterator 
-        */
-  
-        while (k < m && l < n) 
-        { 
-            // Print the first row from the remaining rows 
-            for (i = l; i < n; ++i) { 
-                System.out.print(a[k][i] + " "); 
-            } 
-            k++; 
-  
-            // Print the last column from the remaining columns 
-            for (i = k; i < m; ++i) { 
-                System.out.print(a[i][n - 1] + " "); 
-            } 
-            n--; 
-  
-            // Print the last row from the remaining rows */ 
-            if (k < m) { 
-                for (i = n - 1; i >= l; --i) { 
-                    System.out.print(a[m - 1][i] + " "); 
-                } 
-                m--; 
-            } 
-  
-            // Print the first column from the remaining columns */ 
-            if (l < n) { 
-                for (i = m - 1; i >= k; --i) { 
-                    System.out.print(a[i][l] + " "); 
-                } 
-                l++; 
-            } 
-        } 
-	}
-}
+
 
 -------------------------------------------------------------------------------------------------------------------------------
 
