@@ -1,0 +1,375 @@
+Q1- Q7
+
+Still working on Q8
+
+public class Assignment 3
+{
+	public static void main(String[] args)
+	{
+		Methods qishenli = new Methods();
+		for(int i=1;i<=11;i++)
+		{
+			System.out.println(qishenli.countAndSay(i));
+		}
+		System.out.println();
+		System.out.println(qishenli.reverseString("World Is Good Enough To Fight"));
+		int[][] hello = {{1,2,3},{3,4,3},{5,6,7},{2,5,4}};
+		int[] hello2;
+		hello2 = qishenli.spiralOrder(hello);
+		for(int i=0;i<hello2.length;i++)
+				System.out.println(hello2[i]);
+	}
+}
+class Methods
+{
+	public int[] spiralOrder(int[][] matrix)
+	{
+		int elements = 0;
+			for(int i=0;i<matrix.length;i++)
+				for(int j=0;j<matrix[i].length;j++)
+					elements++;
+		return spiralOrderHelper(matrix,0,matrix.length-1,0,matrix[0].length-1,elements);
+	}
+
+	public int[]  spiralOrderHelper(int[][] matrix,int rowStart,int rowEnd,int colStart,int colEnd,int elements)
+	{	
+		int[] returnArray = new int[elements];
+		int count = 0;
+		for(int i=colStart;i<=colEnd;i++)
+		{
+			returnArray[count]  = matrix[rowStart][i];
+			count++;
+		}
+		for(int i=rowStart+1;i<=rowEnd;i++)
+		{   
+			returnArray[count] = matrix[i][colEnd];
+			count++;
+		}
+		for(int i=colEnd-1;i>=colStart;i--)
+		{
+			returnArray[count] =  matrix[rowEnd][i];
+			count++;
+		}
+		for(int i=rowEnd-1;i>=rowStart+1;i--)
+		{
+			returnArray[count] = matrix[i][colStart];
+			count ++ ;
+		}
+
+		if(rowStart+1 > rowEnd-1 || colStart+1 > colEnd - 1)
+		{
+			return returnArray;
+		}
+		else
+		{
+			int[] return1Array;
+			return1Array = spiralOrderHelper(matrix,rowStart+1,rowEnd-1,colStart+1,colEnd-1,elements-count);
+			for(int i=0;i<return1Array.length;i++)
+				returnArray[count+i] = return1Array[i]; 
+			return returnArray;
+		}
+	}
+
+	
+
+	public static String reverseString(String a)
+    {
+    	int count=0;
+    	for(int i=0;i<a.length();i++)
+    	{
+    		if(a.charAt(i) == ' ')
+    			count++;
+
+    	}
+
+    	count++;
+    	String[] returnArray = new String[count];
+    	int pointer = 0;
+    	String temp = "";
+    	for(int i=0;i<a.length();i++)
+	    	{
+	    		if(a.charAt(i) == ' ')
+	    		{
+	    		    returnArray[pointer] = temp;
+	    			pointer++;
+	    			temp = "";
+	    		}
+	    		else if(i == a.length()-1)
+	    		{
+	    			temp = temp + a.charAt(i);
+	    			returnArray[pointer] = temp;
+	    		}
+	    		else
+	    		temp = temp+a.charAt(i);
+	    	}
+
+		String returnString = "";
+		for(int i=returnArray.length-1;i>=0;i--)
+		{
+			if(i !=0)
+			returnString = returnString+returnArray[i]+" ";
+			else
+			returnString = returnString+returnArray[i];
+
+		}
+
+		return returnString;
+    }
+
+	public String countAndSay(int n)
+	{
+		if(n == 1) 
+			return "1";
+		else
+		{
+			String countString = countAndSay(n-1);
+			String returnString = "";
+			char temp =  countString.charAt(0);
+			int count = 1;
+			for(int i=1;i<countString.length();i++)
+			{
+				if(temp !=  countString.charAt(i))
+					{	
+						returnString = returnString + Integer.toString(count)+temp;
+						temp = countString.charAt(i);
+						count = 1;
+					}
+				else
+					{
+						count ++ ;
+					}
+			}
+			return returnString + Integer.toString(count) + temp;
+		}	
+	}
+}
+
+
+
+
+
+class Course
+{
+	int courseId;
+	String courseName;
+	int maxCapacity;
+	int professorId;
+	int credits;
+	int[] studentIds;
+	public void registerStudent(int[] studentIds)
+	{
+			this.studentIds = studentIds;
+	}
+	public int[] removeDuplicates(int[] studentIds){
+		int arrayLength = studentIds.length;
+		for(int i=0;i<studentIds.length-1;i++)
+		{
+			if(studentIds[i] == -1)
+				continue ;
+			else
+			{
+				for(int j=i+1;j<studentIds.length;j++)			
+					{
+						if(studentIds[i] == studentIds[j])
+							{
+								arrayLength = arrayLength-1 ;
+								studentIds[j] = -1;
+							}
+					}
+				}
+		}
+		int[] studentIdsreturn = new int[arrayLength];
+		int pointer = 0;
+		for(int i=0;i<studentIds.length;i++)
+		{
+			if(studentIds[i] != -1)
+			{
+			studentIdsreturn[pointer] = studentIds[i];
+			pointer ++;
+			}
+		}
+		this.studentIds = studentIdsreturn;
+		return this.studentIds;
+	}
+	public int groupsOfStudents(int[] studentIds){
+		int count = 0;
+		for(int i=0;i<studentIds.length-1;i++)
+		{
+			for(int j=i+1;j<studentIds.length;j++)
+			{
+				if((studentIds[i]+studentIds[j])%2 == 0)
+					count++;
+			}
+		}
+		return count;
+	}
+
+	public Course(int courseId)
+	{
+		this.courseId = courseId;
+	}
+	public Course(int courseId,int professorId)
+	{
+		this.courseId = courseId;
+		this.professorId = professorId;
+	}
+		public Course(int courseId,int professorId,int credits)
+	{
+		this.courseId = courseId;
+		this.professorId = professorId;
+		this.credits = credits;
+	}
+	public int getCourseId()
+	{
+		return courseId;
+	}
+	public void setCourseId(int courseId)
+	{
+		if(courseId > 0)
+		this.courseId = courseId;
+		else
+		System.out.println("Not valid");
+	}
+	public int getProfessorId()
+	{
+		return professorId;
+	}
+	public void setProfessorId(int professorId)
+	{
+		this.professorId = professorId;
+	}
+	public String getcourseName()
+	{
+		return courseName;
+	}
+	public void setcourseName(String courseName)
+	{
+		if(courseName.length()<=60 && courseName.length()>=10)
+		this.courseName = courseName;
+		else
+		System.out.println("Not valid");
+	}
+	public int getMaxCapacity()
+	{
+		return maxCapacity;
+	}
+	public void setMaxCapacity()
+	{
+		this.maxCapacity = maxCapacity;
+	}
+	public int getCredits()
+	{
+		return this.credits;
+	}
+	public void setCredits(int credits)
+	{
+		if(credits<10 && credits>0)
+		this.credits = credits;
+	    else
+	    System.out.println("Not Valid");
+	}
+
+	static void spiralPrint(int m, int n, int a[][]) 
+  	{ 
+        int i, k = 0, l = 0; 
+        /*  k - starting row index 
+        m - ending row index 
+        l - starting column index 
+        n - ending column index 
+        i - iterator 
+        */
+  
+        while (k < m && l < n) 
+        { 
+            // Print the first row from the remaining rows 
+            for (i = l; i < n; ++i) { 
+                System.out.print(a[k][i] + " "); 
+            } 
+            k++; 
+  
+            // Print the last column from the remaining columns 
+            for (i = k; i < m; ++i) { 
+                System.out.print(a[i][n - 1] + " "); 
+            } 
+            n--; 
+  
+            // Print the last row from the remaining rows */ 
+            if (k < m) { 
+                for (i = n - 1; i >= l; --i) { 
+                    System.out.print(a[m - 1][i] + " "); 
+                } 
+                m--; 
+            } 
+  
+            // Print the first column from the remaining columns */ 
+            if (l < n) { 
+                for (i = m - 1; i >= k; --i) { 
+                    System.out.print(a[i][l] + " "); 
+                } 
+                l++; 
+            } 
+        } 
+	}
+}
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+
+Q9
+  Encapsulation in Java with example Encapsulation simply means binding object state(fields) and behaviour(methods) together. 
+  If you are creating class, you are doing encapsulation.
+  
+ example: 
+ class EncapsulationDemo{
+    private int Id;
+    private String Name;
+    private int Age;
+
+    //Getter and Setter methods
+    public int getId(){
+        return Id;
+    }
+
+    public String getName(){
+        return Name;
+    }
+
+    public int getAge(){
+        return Age;
+    }
+
+    public void setId(int newValue){
+        Id = newValue;
+    }
+    
+    public void setName(String newValue){
+        Name = newValue;
+    }
+    public void setAge(int newValue){
+        Age = newValue;
+    }
+}
+public class EncapsTest{
+    public static void main(String args[]){
+         EncapsulationDemo obj = new EncapsulationDemo();
+         obj.setName("Jiaan");
+         obj.setAge(23);
+         obj.setId(12345);
+         System.out.println("Name: " + obj.getName());
+         System.out.println("Id: " + obj.getId());
+         System.out.println("Age: " + obj.getAge());
+    } 
+}
+Output:
+Name: Jiaan
+Id: 12345
+Age: 23
+
+----------------------------------------------------------------------------------------------------------------------------
+Q10
+
+Key Differences Between Abstraction and Encapsulation
+1. Abstraction focuses on elements that are necessary to build a system whereas, the encapsulation focuses on hiding the complexity of the system.
+2. The abstraction is performed during the design level of a system. On the other hand, encapsulation is performed the system is being implemented.
+3. Abstractions main motive is, what is to be done to build a system. Encapsulations main motive is, how it should be done to build a system.
+4. Abstraction is achieved by encapsulation whereas, the encapsulation is achieved by making the elements of the system private.
