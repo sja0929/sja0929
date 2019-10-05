@@ -1,0 +1,577 @@
+Q1
+package q1;
+
+/**
+ * Circle class.
+ *
+ * @author Jiaan Shi
+ * @version since 2019-10-01
+ */
+public class Circle extends Shape {
+    private double radius;
+
+    /**
+     * constructor
+     *
+     * @param radius double
+     */
+    public Circle(double radius) {
+        this.radius = radius;
+        this.area = Math.PI * Math.pow(this.radius, 2);
+        this.perimeter = 2 * Math.PI * this.radius;
+    }
+
+    /**
+     * draw function
+     */
+    @Override
+    public void draw() {
+        System.out.println("Drawing Circle");
+    }
+}
+
+public class Rectangle extends Shape {
+    private double width;
+    private double height;
+
+    public Rectangle(double width, double height) {
+        this.width = width;
+        this.height = height;
+        this.perimeter = 2 * (this.width + this.height);
+        this.area = this.width * this.height;
+    }
+
+    @Override
+    public void draw() {
+        System.out.println("Drawing rectangle");
+    }
+}
+
+public class Shape {
+    protected String name;
+    protected double perimeter;
+    protected double area;
+
+    public void draw() {
+        System.out.println("Drawing Shape");
+    }
+
+    public double getArea() {
+        System.out.println(area);
+        return area;
+    }
+
+    public double getPerimeter() {
+        System.out.println(perimeter);
+        return perimeter;
+    }
+}
+
+public class Square extends Shape {
+    public Square(double side) {
+        this.perimeter = 4 * side;
+        this.area = side * side;
+    }
+
+    @Override
+    public void draw() {
+        System.out.println("Drawing Square");
+    }
+}
+--------------------------------------------------------------------------
+Q2
+package q2;
+
+/**
+ * HappyObject class.
+ *
+ * @author Jiaan Shi
+ * @version since 2019-10-01
+ */
+public class HappyObject extends MoodyObject {
+    //returns a string indicating happy
+    protected String getMood() {
+        return "I feel happy today!";
+    }
+
+    //print laughter string: "hehehe...hahahah...HAHAHAHAHA!!!"
+    public void expressFeelings() {
+        System.out.println("hehehe...hahahah...HAHAHAHAHA!!!");
+    }
+
+    //returns message about self: "Subject laughs a lot"
+    @Override
+    public String toString() {
+        return "Subject laughs a lot";
+
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        HappyObject happyObject = new HappyObject();
+        SadObject sadObject = new SadObject();
+        PsychiatristObject psychiatristObject = new PsychiatristObject();
+        psychiatristObject.examine(happyObject);
+        psychiatristObject.observe(happyObject);
+
+        psychiatristObject.examine(sadObject);
+        psychiatristObject.observe(sadObject);
+    }
+}
+
+public abstract class MoodyObject {
+    //returns the mood: sad or happy - depending on which object sends the message
+    protected abstract String getMood();
+
+    //each object expresses a different emotion
+    protected abstract void expressFeelings();
+
+    //an object responds according to how it feels, print "I feel happy(or sad) today!"
+    public void queryMood() {
+        System.out.println(getMood());
+    }
+}
+
+public class PsychiatristObject {
+    //asks a moody object about its mood
+    public void examine(MoodyObject moodyObject) {
+        System.out.println("How are you feeling today?");
+        moodyObject.queryMood();
+        System.out.println();
+    }
+
+    //a moodyObject is observed to either laugh or cry
+    public void observe(MoodyObject moodyObject) {
+        moodyObject.expressFeelings();
+        System.out.println("Observation: " + moodyObject + "\n");
+    }
+}
+
+public class SadObject extends MoodyObject {
+    //returns a string indicating sad
+    protected String getMood() {
+        return "I feel sad today!";
+    }
+
+    //print crying string: " 'wah' 'boo hoo' 'weep' 'sob' 'weep' "
+    public void expressFeelings() {
+        System.out.println(" 'wah' 'boo hoo' 'weep' 'sob' 'weep' ");
+    }
+
+    //returns message about self: "Subject cries a lot";
+    @Override
+    public String toString() {
+        return "Subject cries a lot";
+    }
+}
+
+--------------------------------------------------------------------
+Q3
+package q3;
+
+/**
+ * Candy class.
+ * The Candy class should be derived from the DessertItem class.
+ * A Candy item has a weight  and a  price per pound  which are
+ * used to determine its  cost . For example, 2.30 lbs.of
+ * fudge @ .89 /lb. = 205 cents. The cost should be rounded to the
+ * nearest cent.
+ *
+ * @author Jiaan Shi
+ * @version since 2019-10-01
+ */
+public class Candy extends DessertItem {
+    private double weight;
+    private double price;
+
+    public Candy(String name, double weight, int price) {
+        this.name = name;
+        this.weight = weight;
+        this.price = price;
+
+    }
+
+    @Override
+    public double getCost() {
+        return this.weight * this.price;
+    }
+
+    @Override
+    public String toString() {
+        String cent = DessertShop.cents2dollarsAndCentsmethod(getCost() / 100);
+        String result = String.format("%.2f lbs. @ %.2f /lb.\n%-30s%s\n", this.weight, this.price / 100.0, this.name, cent);
+        return result;
+    }
+}
+
+/**
+ * Cookie class.
+ * The Cookie class should be derived from the DessertItem class.
+ * A Cookie item has a number  and a  price per dozen  which are
+ * used to determine its  cost . For example, 4 cookies @ 399 cents
+ * /dz. = 133 cents. The cost should be rounded to the nearest cent.
+ *
+ * @author Jiaan Shi
+ * @version since 2019-10-01
+ */
+public class Cookie extends DessertItem {
+    private int number;
+    private double pricePerDozen;
+
+    public Cookie(String name, int number, int pricePerDozen) {
+        this.name = name;
+        this.number = number;
+        this.pricePerDozen = pricePerDozen;
+    }
+
+    @Override
+    public double getCost() {
+        return this.number / 12.0 * pricePerDozen;
+    }
+
+    @Override
+    public String toString() {
+        String cent = DessertShop.cents2dollarsAndCentsmethod(getCost() / 100);
+        String result = String.format("%-30s%s\n", this.name, cent);
+        return result;
+    }
+}
+
+/**
+ * Abstract superclass for Dessert Item hierarchy.
+ *
+ * @author Jiaan Shi
+ * @version since 2019-10-01
+ */
+public abstract class DessertItem {
+    protected String name;
+
+    /**
+     * Null constructor for DessertItem class.
+     *
+     * @param name Initializes DessertItem data
+     */
+    public DessertItem(String name) {
+        this.name = name;
+    }
+
+    public DessertItem() {
+    }
+
+    /**
+     * Returns name of DessertItem.
+     *
+     * @return cost of DessertItem
+     */
+    public abstract double getCost();
+
+
+    /**
+     * Returns cost of DessertItem.
+     *
+     * @return name name of DessertItem
+     */
+    public final String getName() {
+        return this.name;
+    }
+
+}
+
+/**
+ * DessertShop class.
+ * The DessertShop class contains constants such as the tax
+ * rate as well as the name of the store, the maximum size
+ * of an item name and the width used to display the costs
+ * of the items on the receipt.
+ *
+ * @author Jiaan Shi
+ * @version since 2019-10-01
+ */
+public class DessertShop {
+    private final static double taxRate = 0.065;
+    private String name;
+    private final static int maxSize = 0;
+
+    public DessertShop(String name) {
+        this.name = name;
+    }
+
+    public static String cents2dollarsAndCentsmethod(double cents) {
+        cents = (double) Math.round(cents * 100) / 100;
+        return String.valueOf(cents);
+    }
+
+    public static double getTaxRate() {
+        return taxRate;
+    }
+
+    public static double myRound(double sumCost) {
+        return (double) Math.round(sumCost * 100) / 100;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public static int getMaxSize() {
+        return maxSize;
+    }
+}
+
+/**
+ * IceCream class.
+ * The IceCream class should be derived from the DessertItem class.
+ * An IceCream item simply has a  cost .
+ *
+ * @author Jiaan Shi
+ * @version since 2019-10-01
+ */
+public class IceCream extends DessertItem {
+
+    protected double cost;
+
+    public IceCream(String name, int cost) {
+        this.name = name;
+        this.cost = cost;
+
+    }
+
+    @Override
+    public double getCost() {
+        return cost;
+    }
+
+    @Override
+    public String toString() {
+        String result = String.format("%-30s%.2f\n", this.name, this.cost / 100);
+        return result;
+    }
+}
+
+/**
+ * Sundae class.
+ * The Sundae class should be derived from the IceCream class.
+ * The  cost  of a Sundae is the  cost  of the IceCream plus the
+ * cost of the topping .
+ *
+ * @author Jiaan Shi
+ * @version since 2019-10-01
+ */
+public class Sundae extends IceCream {
+    private String sundaeName;
+    private double topping;
+
+    public Sundae(String name, int cost, String sundaeName, int topping) {
+        super(name, cost);
+        this.name = name;
+        this.cost = cost;
+        this.sundaeName = sundaeName;
+        this.topping = topping;
+    }
+
+    @Override
+    public double getCost() {
+        return this.cost + this.topping;
+    }
+
+    @Override
+    public String toString() {
+        String cent = DessertShop.cents2dollarsAndCentsmethod(getCost() / 100);
+        String result = String.format("%s Sundae with\n%-30s%s\n", this.sundaeName, this.name, cent);
+        return result;
+    }
+}
+
+import java.util.ArrayList;
+
+/**
+ * Maintains a list of DessertItem references
+ * There is no limit to the number of DessertItem's in the list
+ *
+ * @author Jiaan Shi
+ * @version since 2019-10-01
+ */
+public class Checkout {
+    ArrayList<DessertItem> dessertItemArrayList;
+
+    /**
+     * Creates a Checkout instance with an empty list of DessertItem's
+     */
+    public Checkout() {
+        this.dessertItemArrayList = new ArrayList<DessertItem>();
+    }
+
+    /**
+     * Returns the number of DessertItem's in the list
+     *
+     * @return number of DessertItem's in the list int
+     */
+    public int numberOfItems() {
+        return dessertItemArrayList.size();
+    }
+
+    /**
+     * Returns total cost of items in cents (without tax)
+     *
+     * @return total cost of items in cents (without tax) math.round
+     */
+    public double totalCost() {
+        double total = 0;
+        for (DessertItem d : dessertItemArrayList) {
+            total += d.getCost();
+        }
+        return Math.round(total);
+    }
+
+    /**
+     * Returns total tax on items in cents
+     *
+     * @return total tax on items in cents, math.round
+     */
+    public double totalTax() {
+        double totalTax = totalCost() * DessertShop.getTaxRate();
+        return Math.round(totalTax);
+    }
+
+    /**
+     * A DessertItem is added to the end of the list of items
+     *
+     * @param item - DessertItem to add to list of items
+     */
+    public void enterItem(DessertItem item) {
+        dessertItemArrayList.add(item);
+    }
+
+    /**
+     * Clears the Checkout to begin checking out a new set of items
+     */
+    public void clear() {
+        this.dessertItemArrayList.clear();
+    }
+
+    /**
+     * Returns a String representing a receipt for the current list of items.
+     *
+     * @return a String representing a receipt for the current list of DessertItem's
+     * with the name of the Dessert store, the items purchased, the tax,
+     * and the total cost,
+     */
+    @Override
+    public String toString() {
+        String result = "\t\tM & M Dessert Shop\n" +
+                "\t\t--------------------\n";
+        double sumCost = 0;
+        for (DessertItem d : dessertItemArrayList) {
+            result += d;
+            sumCost += d.getCost() / 100;
+        }
+        sumCost = DessertShop.myRound(sumCost);
+        result += "\n";
+        result += String.format("%-30s%.2f\n", "Tax", DessertShop.myRound(sumCost * DessertShop.getTaxRate()));
+        result += String.format("%-30s%.2f\n", "Total Cost", DessertShop.myRound(sumCost + sumCost * DessertShop.getTaxRate()));
+        return result;
+    }
+}
+
+-------------------------------------------------------------------------------------------------------------------------
+Q4
+package q4;
+
+/**
+ * since 2019-10-01 ä¸‹å�ˆ8:06
+ *
+ * @author Jiaan Shi
+ * @version since 2019-10-01
+ */
+public class Main {
+    /**
+     * Given two matrices  A  and  B ,
+     * return the result of  AB .
+     * You may assume that  A 's column number is equal to  B 's row number.
+     *
+     * @param args
+     */
+    public static void main(String[] args) {
+        int[][] A = {{1, 0, 0}, {-1, 0, 3}};
+        int[][] B = {{7, 0, 0}, {0, 0, 0}, {0, 0, 1}};
+        int[][] C = new int[A.length][B[0].length];
+        for (int i = 0; i < A.length; i++) {
+            for (int j = 0; j < B[0].length; j++) {
+                for (int k = 0; k < A[0].length; k++) {
+                    C[i][j] = C[i][j] + A[i][k] * B[k][j];
+                }
+            }
+        }
+        for (int i = 0; i < C.length; i++) {
+            for (int j = 0; j < C[0].length; j++) {
+                System.out.print(C[i][j] + " ");
+            }
+            System.out.println();
+        }
+    }
+}
+---------------------------------------------------------------------
+Q5
+package q5;
+
+import java.util.Scanner;
+import java.util.Stack;
+
+/**
+ * Main class.
+ *
+ * @author Jiaan Shi
+ * @version since 2019-10-01
+ */
+public class Main {
+
+    private static Scanner scanner;
+
+	public static void main(String[] args) {
+        scanner = new Scanner(System.in);
+        String line = scanner.nextLine();
+        int[] result = findPermutation(line);
+        System.out.print("[");
+        for (int i = 0; i < result.length; i++) {
+            System.out.print(result[i]);
+            if (i != result.length - 1) {
+                System.out.print(", ");
+            }
+        }
+        System.out.print("]");
+    }
+
+    /**
+     * Given a string  S  that  only  contains "I" (increase) or "D" (decrease),
+     * let  N = S.length . Return  any  permutation  A  of  [0, 1, ..., N]
+     * such that for all  i = 0, ..., N-1 :
+     * If  S[i] == "I" , then  A[i] < A[i+1]
+     * If  S[i] == "D" , then  A[i] > A[i+1]
+     *
+     * @param s String
+     * @return result int[]
+     */
+    public static int[] findPermutation(String s) {
+        int[] res = new int[s.length() + 1];
+        Stack<Integer> stack = new Stack<>();
+        int j = 0;
+        for (int i = 0; i < s.length(); i++) {
+            if (s.charAt(i) == 'I') {
+                stack.push(i);
+                while (!stack.isEmpty())
+                    res[j++] = stack.pop();
+            } else
+                stack.push(i);
+        }
+        stack.push(s.length());
+        while (!stack.isEmpty())
+            res[j++] = stack.pop();
+        return res;
+    }
+}
+
