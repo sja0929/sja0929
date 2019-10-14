@@ -1,0 +1,572 @@
+Q1
+  The final keyword can be used with class method and variable. A final class cannot be instantiated, a final method cannot be overridden and a final variable cannot be reassigned.
+  The finally keyword is used to create a block of code that follows a try block. A finally block of code always executes, whether or not an exception has occurred. Using a finally block allows you to run any cleanup-type statements that you just wish to execute, despite what happens within the protected code.
+  The finalize() method is used just before object is destroyed and can be called just prior to object creation.
+  
+---------------------------------------------------------------------------------------------
+Q2
+package q2;
+
+import java.util.Scanner;
+
+/**
+ * Number class.
+ *
+ * @author Jiaan Shi
+ * @version since 2019-10-14
+ */
+public class Number {
+    private static Scanner scanner;
+
+	/**
+     * calculate quotient of two integers
+     *
+     * @param a int
+     * @param b int
+     * @return c double, c = a/b
+     */
+    public static double count(int a, int b) {
+        double c = 0;
+        try {
+            if (b == 0) {
+                throw new Exception("Divisor is not 0");
+            }
+            c = a * 1.0 / b;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return c;
+    }
+
+    public static void main(String[] args) {
+        scanner = new Scanner(System.in);
+        System.out.println("please input a:");
+        int a = Integer.parseInt(scanner.nextLine());
+        System.out.println("please input b:");
+        int b = Integer.parseInt(scanner.nextLine());
+        double c = count(a, b);
+        System.out.println("a/b=" + c);
+    }
+}
+
+-------------------------------------------------------------------------------------
+Q3
+package q3;
+
+/**
+ * Contractor class.
+ *
+ * @author Jiaan Shi
+ * @version since 2019-10-14
+ */
+public class Contractor extends Employee {
+
+    private int workingHours;
+
+    /**
+     * constructor.
+     *
+     * @param name           String
+     * @param paymentPerHour int
+     * @param workingHours   int
+     */
+    public Contractor(String name, int paymentPerHour, int workingHours) {
+        super(name, paymentPerHour);
+        this.workingHours = workingHours;
+    }
+
+    /**
+     * salary = workingtime * paymentperhour
+     *
+     * @return salary int
+     */
+    @Override
+    public int calculateSalary() {
+        return workingHours * getPaymentPerHour();
+    }
+
+    public static void main(String[] args) {
+        Contractor contractor = new Contractor("contractor A", 10, 10);
+        System.out.println(contractor.getName() + " salary:" + contractor.calculateSalary());
+        FullTime fullTime = new FullTime("fulltime A", 10);
+        System.out.println(fullTime.getName() + " salary:" + fullTime.calculateSalary());
+
+    }
+}
+
+/**
+ * Employee class.
+ *
+ * @author Jiaan Shi
+ * @version since 2019-10-14
+ */
+public abstract class Employee {
+    private String Name;
+    private int paymentPerHour;
+
+    /**
+     * constructor
+     *
+     * @param name
+     * @param paymentPerHour
+     */
+    public Employee(String name, int paymentPerHour) {
+        Name = name;
+        this.paymentPerHour = paymentPerHour;
+    }
+
+    public abstract int calculateSalary();
+
+    /**
+     * get name value.
+     *
+     * @return Name String
+     */
+    public String getName() {
+        return Name;
+    }
+
+    /**
+     * set name value.
+     *
+     * @param name String
+     */
+    public void setName(String name) {
+        Name = name;
+    }
+
+    /**
+     * get paymentPerHour value.
+     *
+     * @return paymentPerHour int
+     */
+    public int getPaymentPerHour() {
+        return paymentPerHour;
+    }
+
+    /**
+     * set paymentPerHour value.
+     *
+     * @param paymentPerHour int
+     */
+    public void setPaymentPerHour(int paymentPerHour) {
+        this.paymentPerHour = paymentPerHour;
+    }
+}
+
+/**
+ * FullTime class.
+ *
+ * @author Jiaan Shi
+ * @version since 2019-10-14
+ */
+public class FullTime extends Employee {
+
+    /**
+     * consturctor.
+     *
+     * @param name           String
+     * @param paymentPerHour int
+     */
+    public FullTime(String name, int paymentPerHour) {
+        super(name, paymentPerHour);
+    }
+
+    /**
+     * salary = workingtime * paymentperhour (workingtime = 8)
+     *
+     * @return salary int
+     */
+    @Override
+    public int calculateSalary() {
+        return 8 * getPaymentPerHour();
+    }
+}
+
+----------------------------------------------------------------------------------
+Q4
+package q4;
+
+import java.util.Scanner;
+
+
+/**
+ * MyIndexOutOfBoundException class.
+ *
+ * @author Jiaan Shi
+ * @version since 2019-10-14
+ */
+public class MyIndexOutOfBoundException extends IndexOutOfBoundsException {
+    private int lowerBound;
+    private int upperBound;
+    private int index;
+
+    /**
+     * constructor.
+     *
+     * @param lowerBound lowerBound
+     * @param upperBound lowerBound
+     * @param index      lowerBound
+     */
+    public MyIndexOutOfBoundException(int lowerBound, int upperBound, int index) {
+        this.lowerBound = lowerBound;
+        this.upperBound = upperBound;
+        this.index = index;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("\"Error Message: Index: %d, but Lower bound: %d, Upper bound: %d\"", index, lowerBound, upperBound);
+    }
+
+    public static void main(String[] args) {
+        try {
+            int size = 10;
+            int[] a = new int[size];
+            Scanner scanner = new Scanner(System.in);
+            System.out.println("please input index:");
+            int index = Integer.parseInt(scanner.nextLine());
+            if (index > size-1) {
+                throw new MyIndexOutOfBoundException(0, size - 1, index);
+            } else {
+                System.out.println(a[index]);
+            }
+
+        } catch (MyIndexOutOfBoundException e) {
+            System.out.println(e);
+        }
+    }
+}
+------------------------------------------------------------------------------
+Q5
+package q5;
+
+/**
+ * Boardable interface.
+ *
+ * @author Jiaan Shi
+ * @version since 2019-10-14
+ */
+public interface Boardable {
+    void setBoardStart(int month, int day, int year);
+    void setBoardEnd(int month, int day, int year);
+    boolean boarding(int month, int day, int year);
+}
+import java.time.LocalDate;
+
+/**
+ * Cat class.
+ *
+ * @author Jiaan Shi
+ * @version since 2019-10-14
+ */
+public class Cat extends Pet implements Boardable {
+
+    private String hairLength;
+    private LocalDate start;
+    private LocalDate end;
+
+    /**
+     * cosnstructor.
+     * @param name String
+     * @param ownerName String
+     * @param color String
+     * @param hairLength String
+     */
+    public Cat(String name, String ownerName, String color, String hairLength) {
+        super(name, ownerName, color);
+        this.hairLength = hairLength;
+    }
+
+    /**
+     * get hair length value.
+     * @return hairLength String
+     */
+    public String getHairLength() {
+        return hairLength;
+    }
+
+    /**
+     * return the name, owner's name, hair, color, and gender(use getSex())
+     * like this:
+     * SPOT owned by Marry
+     * Color:Black and White
+     * Sex:Male
+     * @return s String
+     */
+    @Override
+    public String toString() {
+        String result = "CAT:\n";
+        result += getName() + " owned by " + getOwnerName() + "\n"
+                + "Color: " + getColor() + "\n"
+                + "Sex: " + getSex() + "\n"
+                + "Hair: " + getHairLength();
+
+        return result;
+    }
+
+    /**
+     * set board start.
+     * @param month int 1-12
+     * @param day int  1-31
+     * @param year int four digit
+     */
+    @Override
+    public void setBoardStart(int month, int day, int year) {
+        if (!(1 <= month && month <= 12)) {
+            month = 1;
+        }
+        if (!(1 <= day && day <= 31)) {
+            day = 1;
+        }
+        if (!(1000 <= year && year <= 9999)) {
+            year = 1000;
+        }
+        start = LocalDate.of(year, month, day);
+    }
+
+    /**
+     * set board end.
+     * @param month int 1-12
+     * @param day int  1-31
+     * @param year int four digit
+     */
+    @Override
+    public void setBoardEnd(int month, int day, int year) {
+        if (!(1 <= month && month <= 12)) {
+            month = 1;
+        }
+        if (!(1 <= day && day <= 31)) {
+            day = 1;
+        }
+        if (!(1000 <= year && year <= 9999)) {
+            year = 1000;
+        }
+        end = LocalDate.of(year, month, day);
+    }
+
+    /**
+     * check the date is between start and end.
+     * @param month int
+     * @param day int
+     * @param year int
+     * @return boolean
+     */
+    @Override
+    public boolean boarding(int month, int day, int year) {
+        LocalDate now = LocalDate.of(year, month, day);
+        if (now.isEqual(start) || now.equals(end) || (now.isBefore(end) && now.isAfter(start))) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static void main(String[] args) {
+        Cat cat = new Cat("Tom", "Bob", "black", "short");
+        cat.setSex(3);
+        System.out.println(cat);
+    }
+}
+import java.time.LocalDate;
+
+/**
+ * Dob class.
+ *
+ * @author Jiaan Shi
+ * @version since 2019-10-14
+ */
+public class Dog extends Pet implements Boardable {
+    private String size;
+    private LocalDate start;
+    private LocalDate end;
+
+    public Dog(String name, String ownerName, String color, String size) {
+        super(name, ownerName, color);
+        this.size = size;
+    }
+
+    public String getSize() {
+        return size;
+    }
+
+    @Override
+    public String toString() {
+        String result = "DOG:\n";
+        result += getName() + " owned by " + getOwnerName() + "\n"
+                + "Color: " + getColor() + "\n"
+                + "Sex: " + getSex() + "\n"
+                + "Size: " + getSize();
+
+        return result;
+    }
+
+    @Override
+    public void setBoardStart(int month, int day, int year) {
+        if (!(1 <= month && month <= 12)) {
+            month = 1;
+        }
+        if (!(1 <= day && day <= 31)) {
+            day = 1;
+        }
+        if (!(1000 <= year && year <= 9999)) {
+            year = 1000;
+        }
+        start = LocalDate.of(year, month, day);
+    }
+
+    @Override
+    public void setBoardEnd(int month, int day, int year) {
+        if (!(1 <= month && month <= 12)) {
+            month = 1;
+        }
+        if (!(1 <= day && day <= 31)) {
+            day = 1;
+        }
+        if (!(1000 <= year && year <= 9999)) {
+            year = 1000;
+        }
+        end = LocalDate.of(year, month, day);
+    }
+
+    @Override
+    public boolean boarding(int month, int day, int year) {
+        LocalDate now = LocalDate.of(year, month, day);
+        if (now.isEqual(start) || now.equals(end) || (now.isBefore(end) && now.isAfter(start))) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static void main(String[] args) {
+        Dog dog = new Dog("Spot", "Susam", "white", "medium");
+        dog.setSex(3);
+        System.out.println(dog);
+    }
+
+}
+/**
+ * Pet class.
+ *
+ * @author Jiaan Shi
+ * @version since 2019-10-14
+ */
+public class Pet {
+    private String name;
+    private String ownerName;
+    private String color;
+    protected int sex;
+    public static final int MALE = 1;
+    public static final int FEMALE = 2;
+    public static final int SPAYED = 3;
+    public static final int NEUTERED = 4;
+
+    /**
+     * constructor.
+     * @param name String
+     * @param ownerName String
+     * @param color String
+     */
+    public Pet(String name, String ownerName, String color) {
+        this.name = name;
+        this.ownerName = ownerName;
+        this.color = color;
+    }
+
+    /**
+     * get name value.
+     * @return name string
+     */
+    public String getName() {
+        return name;
+    }
+    /**
+     * set name value.
+     * @param name string
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    /**
+     * get OwnerName value.
+     * @return ownerName string
+     */
+    public String getOwnerName() {
+        return ownerName;
+    }
+
+    /**
+     * set ownername value.
+     * @param ownerName string
+     */
+    public void setOwnerName(String ownerName) {
+        this.ownerName = ownerName;
+    }
+
+    /**
+     * get color value.
+     * @return color string
+     */
+    public String getColor() {
+        return color;
+    }
+
+    /**
+     * set color value.
+     * @param color string
+     */
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    /**
+     * return the string equivalent of the gender, e.g the string "MALE".
+     *
+     * @return sex String
+     */
+    public String getSex() {
+        if (sex == MALE) {
+            return "Male";
+        }
+        if (sex == FEMALE) {
+            return "Female";
+        }
+        if (sex == SPAYED) {
+            return "spayed";
+        }
+        if (sex == NEUTERED) {
+            return "Neutered";
+        }
+        return null;
+    }
+
+    /**
+     * set sex value
+     * @param sexid int
+     */
+    public void setSex(int sexid) {
+        this.sex = sexid;
+    }
+
+    /**
+     * return the name, owner's name, age, color, and gender(use getSex())
+     *
+     * @return s String
+     */
+    @Override
+    public String toString() {
+        return name + " owned by " + ownerName + '\n' +
+                "Color:" + color + '\n' +
+                "Sex:" + getSex();
+    }
+
+    public static void main(String[] args) {
+        Pet pet = new Pet("SPOT", "Marry", "Black and White");
+        pet.setSex(1);
+        System.out.println(pet);
+    }
+}
+
+
