@@ -1,0 +1,978 @@
+1. 
+package q1;
+
+import javafx.util.Pair;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+
+public class Atm {
+    //variable
+    private ArrayList<User> users = new ArrayList<User>();
+    private int availableAmountInMachine;
+    private ArrayList<Pair<String, Double>> transactionFee;
+
+    /**
+     * constructor
+     */
+    public Atm() {
+        this.availableAmountInMachine = 10000;
+    }
+
+    // set get functions.
+    public int getAvailableAmountInMachine() {
+        return availableAmountInMachine;
+    }
+
+    public void setAvailableAmountInMachine(int availableAmountInMachine) {
+        this.availableAmountInMachine = availableAmountInMachine;
+    }
+
+    public void setUsers(ArrayList<User> users) {
+        this.users = users;
+    }
+
+    public ArrayList<Pair<String, Double>> getTransactionFee() {
+        return transactionFee;
+    }
+
+    public void setTransactionFee(ArrayList<Pair<String, Double>> transactionFee) {
+        this.transactionFee = transactionFee;
+    }
+
+    /**
+     * add transaction fee.
+     *
+     * @param p Pair<String, Double>
+     */
+    public void addTransactionFee(Pair<String, Double> p) {
+        transactionFee.add(p);
+    }
+
+
+    /**
+     * updateAvailableAmountInMachine function.
+     *
+     * @param amount double
+     * @return boolean update succeefully or not
+     */
+    public boolean updateAvailableAmountInMachine(double amount) {
+        if (amount > this.availableAmountInMachine) {
+            return false;
+        } else {
+            this.availableAmountInMachine -= amount;
+            return true;
+        }
+    }
+
+
+    /**
+     * add user to the bank
+     *
+     * @param u, the user to be added
+     */
+    public void openAccount(User u) {
+        users.add(u);
+    }
+
+    /**
+     * remove user in the bank
+     *
+     * @param b, the User to be remove
+     */
+    public void closeAccount(User b) {
+        users.remove(b);
+    }
+
+
+    /**
+     * get all the bank users in the bank
+     *
+     * @return all the users
+     */
+    public ArrayList<User> getUsers() {
+        return users;
+    }
+
+    /**
+     * login account by account Num and password
+     *
+     * @param accountNum long
+     * @param password   String
+     * @return account if login successfully, else null
+     */
+    public User login(long accountNum, String password) {
+        for (User user : users) {
+            if (user.getAccNo() == accountNum && user.getPassword().equals(password)) {
+                user.setLogin(true);
+                return user;
+            }
+        }
+        return null;
+    }
+
+
+    /**
+     * check the user exist in bank or not.
+     *
+     * @param name  String
+     * @param age   Integer
+     * @param phone String
+     * @return boolean true or false
+     */
+    public boolean validInformation(String name, Integer age, String phone) {
+        for (User user : users) {
+            if (user.getAccName().equals(name) && age == user.getAge() && phone.equals(user.getPhone())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * recentTransaction should display the last 10 transactions,
+     * in a format of transactionName - amount. (transactionName is withDrawal or deposit).
+     *
+     * @param user
+     */
+    public void checkRecentTransactions(User user) {
+        ArrayList<Pair<String, Double>> result = new ArrayList<>();
+        for (Pair<String, Double> fee : transactionFee) {
+            if (fee.getKey().equals(user.getAccName())) {
+                result.add(fee);
+            }
+        }
+        if (result.size() > 10) {
+            List<Pair<String, Double>> last10 = new ArrayList<>();
+            int size = result.size();
+            last10 = result.subList(size - 10, size);
+            for (int i = last10.size() - 1; i >= 0; i--) {
+                Pair<String, Double> fee = last10.get(i);
+                displayFee(fee);
+            }
+        } else {
+            for (int i = transactionFee.size() - 1; i >= 0; i--) {
+                Pair<String, Double> fee = transactionFee.get(i);
+                displayFee(fee);
+            }
+        }
+    }
+
+    /**
+     * displayFee function.
+     * a format of transactionName - amount. (transactionName is withDrawal or deposit).
+     *
+     * @param fee Pair<String, Double>
+     */
+    public void displayFee(Pair<String, Double> fee) {
+        if (fee.getValue() < 0) {
+            double amount = -fee.getValue();
+            System.out.println("withdraw:" + amount);
+        } else {
+            double amount = fee.getValue();
+            System.out.println("deposit:" + amount);
+        }
+    }
+
+    /**
+     * main function.
+     *
+     * @param args String[]
+     * @throws Exception
+     */
+    public static void main(String[] args) throws Exception {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Welcome to our atm!Please choose any item below.");
+        Atm atm = ReadTxt.readFile();
+        User user = null;
+        while (true) {
+            listMenu();
+            String choice = scanner.nextLine();
+            if (choice.equals("1")) {
+                System.out.println("please input your name:");
+                String accName = scanner.nextLine();
+                System.out.println("please input your address:");
+                String address = scanner.nextLine();
+                System.out.println("please input your phoneNumber:");
+                String phone = scanner.nextLine();
+                System.out.println("please input your age:");
+                Integer age = Integer.valueOf(scanner.nextLine());
+                System.out.println("please input your password:");
+                String password = scanner.nextLine();
+                User newUser = new User(accName, age, phone, address, password);
+                System.out.println("your account num is: " + String.valueOf(newUser.getAccNo()));
+                atm.openAccount(newUser);
+            } else if (choice.equals("2")) {
+                System.out.println("please input your account number");
+                int accountNum = Integer.parseInt((scanner.nextLine()));
+                System.out.println("please input your password number");
+                String pin = scanner.nextLine();
+                user = atm.login(accountNum, pin);
+                if (user != null) {
+                    System.out.println("login successfully");
+                } else {
+                    System.out.println("login fail");
+                }
+            } else if (choice.equals("3")) {
+                if (user == null) {
+                    System.out.println("please login first");
+                    continue;
+                }
+                System.out.println("please input amount");
+                double amount = Double.valueOf(scanner.nextLine());
+                atm.updateAvailableAmountInMachine(amount);
+                user.deposit(amount);
+                atm.addTransactionFee(new Pair<String, Double>(user.getAccName(), amount));
+            } else if (choice.equals("4")) {
+                if (user == null) {
+                    System.out.println("please login first");
+                    continue;
+                }
+                System.out.println("please input amount");
+                double amount = Double.valueOf(scanner.nextLine());
+                if (atm.updateAvailableAmountInMachine(amount)) {
+                    user.withdraw(amount);
+                    atm.addTransactionFee(new Pair<String, Double>(user.getAccName(), -1 * amount));
+                } else {
+                    System.out.println("no enough available amount in machine");
+                }
+            } else if (choice.equals("5")) {
+                if (user == null) {
+                    System.out.println("please login first");
+                    continue;
+                }
+                System.out.println("Available Balance: " + user.getBalance());
+            } else if (choice.equals("6")) {
+                if (user == null) {
+                    System.out.println("please login first");
+                    continue;
+                }
+                atm.checkRecentTransactions(user);
+            } else if (choice.equals("7")) {
+                System.out.println("please input you name");
+                String name = scanner.nextLine();
+                System.out.println("please input you age");
+                Integer age = Integer.valueOf(scanner.nextLine());
+                System.out.println("please input you phone");
+                String phone = scanner.nextLine();
+                if (atm.validInformation(name, age, phone)) {
+                    System.out.println("please input your new password");
+                    String password = scanner.nextLine();
+                    atm.changePassword(name, age, phone, password);
+                    System.out.println("reset password successfully!");
+                } else {
+                    System.out.println("invalid information!");
+                }
+            } else if (choice.equals("8")) {
+                ReadTxt.writeFile(atm);
+                break;
+            }
+        }
+
+    }
+
+    /**
+     * change password function.
+     *
+     * @param name     String
+     * @param age      Integer
+     * @param phone    String
+     * @param password String
+     */
+    private void changePassword(String name, Integer age, String phone, String password) {
+        for (User user : users) {
+            if (user.getAccName().equals(name) && age == user.getAge() && phone.equals(user.getPhone())) {
+                user.setPassword(password);
+            }
+        }
+    }
+
+    /**
+     * list the menu
+     */
+    private static void listMenu() {
+        System.out.println("1. Open Account");
+        System.out.println("2. Login Account");
+        System.out.println("3. Deposit Account");
+        System.out.println("4. Withdraw Account");
+        System.out.println("5. Check Available Balance");
+        System.out.println("6. Check Recent Transactions");
+        System.out.println("7. Forget Password");
+        System.out.println("8. Save Account");
+    }
+}
+
+package q1;
+
+import javafx.util.Pair;
+
+import java.io.*;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+
+public class ReadTxt {
+
+    /**
+     * read TXT file
+     */
+    public static Atm readFile() throws Exception {
+        Atm bank = new Atm();
+        String userDataFile = "./user.txt"; // Absolute path or relative path can be written to the file to demonstrate the relative path, read the above path input.txt file
+        // to prevent files from failing to create or read, to catch errors and print them, or to throw them;
+        // not closing the file will result in the leakage of resources, read and write files are the same
+        // Java7 try-with-resources can be elegant to close the file, the exception automatically close the file; Detailed interpretation of https://stackoverflow.com/a/12665271
+        try {
+            FileReader reader = new FileReader(userDataFile);
+            BufferedReader br = new BufferedReader(reader); //  Create an object that converts the contents of a file into a language a computer can read
+            String line;
+            while ((line = br.readLine()) != null) {
+                // Read in one row at a time
+                String[] lineDataArray = line.split(",");
+                int accNo = Integer.parseInt(lineDataArray[0]);
+                String accName = lineDataArray[1];
+                String address = lineDataArray[2];
+                int age = Integer.parseInt(lineDataArray[3]);
+                String password = lineDataArray[4];
+                String phone = lineDataArray[5];
+                double balance = Double.parseDouble(lineDataArray[6]);
+
+                User user = new User(accNo, accName, address, age
+                        , password, phone, balance);
+                bank.openAccount(user);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        String transactionDataFile = "./transaction.txt";
+        ArrayList<Pair<String, Double>> transactionFee = new ArrayList<>();
+        try {
+            FileReader reader = new FileReader(transactionDataFile);
+            BufferedReader br = new BufferedReader(reader); //  Create an object that converts the contents of a file into a language a computer can read
+            String line;
+            while ((line = br.readLine()) != null) {
+                // Read in one row at a time
+                String[] lineDataArray = line.split(",");
+                String accName = lineDataArray[0];
+                double fee = Double.parseDouble(lineDataArray[1]);
+                Pair pair = new Pair<String, Double>(accName, fee);
+                transactionFee.add(pair);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        bank.setTransactionFee(transactionFee);
+        return bank;
+    }
+
+    /**
+     * write TXT file
+     */
+    public static void writeFile(Atm atm) {
+        try {
+            String userDataFileName = "./user.txt";
+            String transactionDataFileName = "./transaction.txt";
+
+            File userDataFile = new File(userDataFileName);
+            File transactionDataFile = new File(transactionDataFileName);
+
+            userDataFile.createNewFile(); // create a new file with the same name
+            transactionDataFile.createNewFile();
+            FileWriter userDataFileWriter = new FileWriter(userDataFile);
+            FileWriter transactionDataFileWriter = new FileWriter(transactionDataFile);
+            BufferedWriter userDataFileBufferedWriter = new BufferedWriter(userDataFileWriter);
+            BufferedWriter transactionDataFileBufferedWriter = new BufferedWriter(transactionDataFileWriter);
+
+            for (User user : atm.getUsers()) {
+                String line = "";
+                line += user.getAccNo() + ",";
+                line += user.getAccName() + ",";
+                line += user.getAddress() + ",";
+                line += user.getAge() + ",";
+                line += user.getPassword() + ",";
+                line += user.getPhone() + ",";
+                line += user.getBalance();
+                line += "\n";
+                userDataFileBufferedWriter.write(line);
+            }
+            userDataFileBufferedWriter.flush();// // Press the cache contents into a file
+            for (Pair<String, Double> p : atm.getTransactionFee()) {
+                String line = p.getKey() + "," + p.getValue() + "\n";
+                transactionDataFileBufferedWriter.write(line);
+            }
+            transactionDataFileBufferedWriter.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+package q1;
+
+/**
+ * @program: assignment6
+ * @filename: User
+ * @description: ${description}
+ * @author:
+ * @create: 2019-10-27
+ **/
+
+/**
+ * User class.
+ */
+public class User {
+    // variables
+    private int accNo;// account number
+    private String accName; // account name
+    private int age; // customer age
+    private String phone; // phone number
+    private String address; // customer address
+    private String password; // login password
+
+    private double balance; // balance
+    private boolean login;// login status
+
+    /**
+     * constructor.
+     *
+     * @param accName  String
+     * @param age      int
+     * @param phone    String
+     * @param address  String
+     * @param password String
+     */
+    public User(String accName, int age, String phone, String address, String password) {
+        this.accName = accName;
+        this.age = age;
+        this.phone = phone;
+        this.address = address;
+        this.password = password;
+
+        this.accNo = this.hashCode();
+        this.balance = 0;
+        this.login = false;
+    }
+
+    /**
+     * constructor.
+     *
+     * @param accNo    int
+     * @param accName  String
+     * @param address  String
+     * @param age      int
+     * @param password String
+     * @param phone    String
+     * @param balance  double
+     */
+    public User(int accNo, String accName, String address, int age
+            , String password, String phone, double balance) {
+        this.accName = accName;
+        this.age = age;
+        this.phone = phone;
+        this.address = address;
+        this.password = password;
+        this.accNo = accNo;
+        this.balance = balance;
+        this.login = false;
+    }
+
+    // get set functions
+    public int getAccNo() {
+        return accNo;
+    }
+
+    public void setAccNo(int accNo) {
+        this.accNo = accNo;
+    }
+
+    public String getAccName() {
+        return accName;
+    }
+
+    public void setAccName(String accName) {
+        this.accName = accName;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public double getBalance() {
+        return balance;
+    }
+
+    public void setBalance(double balance) {
+        this.balance = balance;
+    }
+
+    public boolean isLogin() {
+        return login;
+    }
+
+    public void setLogin(boolean login) {
+        this.login = login;
+    }
+
+    /**
+     * deposit from the account
+     *
+     * @param amount
+     * @throws InterruptedException
+     */
+    public void deposit(double amount) throws InterruptedException {
+        balance = balance + amount;
+        System.out.println("Deposit " + amount + " successful");
+    }
+
+    /**
+     * withdraw from the account
+     *
+     * @param amount
+     */
+    public void withdraw(double amount) {
+        if (check(amount)) {
+            balance = balance - amount;
+            System.out.println("Withdraw " + amount + " successfull.");
+        }
+    }
+
+
+    /**
+     * check the amount is enough or not
+     *
+     * @param amount
+     * @return boolean
+     */
+    protected boolean check(double amount) {
+        boolean allowed = false;
+        if (balance - amount >= 0) {
+            allowed = true;
+        } else {
+            System.out.println("Withdraw " + amount
+                    + " unsuccessfull. Do not have enough available funds.");
+        }
+        return allowed;
+    }
+
+    /**
+     * tostrig function.
+     *
+     * @return s String
+     */
+    public String toString() {
+        return "Account number: " + accNo + "\n" + "Account name: " + accName
+                + "\n" + "Balance: " + balance + "\n";
+    }
+
+}
+
+---------------------------------------------------------------------------------------------------
+2. (1) Random access value: ArrayList is better than LinkedList because it is sequential, linkedlist needs to move pointers, arrayList implements data structures based on dynamic arrays, and LinkedList is based on linked list data structures.
+(2) Delete element Insertion element: LinkedList is better than ArrayList because ArrayList wants to move data.
+
+---------------------------------------------------------------------------------------------------
+3. 
+package q3;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+
+
+public class Q3 {
+    /**
+     * Given two strings s and t , the function to determine if t is an anagram of s.
+     * @param s String
+     * @param t String
+     * @return boolean true or false
+     */
+    public static boolean isAnagram(String s, String t) {
+        HashMap<Character, Integer> mapS = new HashMap<Character, Integer>();
+        for (int i = 0; i < s.length(); i++) {
+            char item = s.charAt(i);
+            if (mapS.keySet().contains(item)) {
+                mapS.put(item, mapS.get(item) + 1);
+            } else {
+                mapS.put(item, 1);
+            }
+        }
+        ArrayList<Integer> listOfSValues = new ArrayList<Integer>(mapS.values());
+
+        HashMap<Character, Integer> mapT = new HashMap<Character, Integer>();
+        for (int i = 0; i < t.length(); i++) {
+            char item = t.charAt(i);
+            if (mapT.keySet().contains(item)) {
+                mapT.put(item, mapT.get(item) + 1);
+            } else {
+                mapT.put(item, 1);
+            }
+        }
+        ArrayList<Integer> listOfTValues = new ArrayList<Integer>(mapT.values());
+        if(listOfSValues.size()!= listOfTValues.size()){
+            return false;
+        }
+        for(Character c:mapT.keySet()){
+            if(mapS.get(c)!=mapT.get(c)){
+                return false;
+            }
+        }
+        return true;
+
+    }
+
+    /**
+     * main function.
+     * @param args String[]
+     */
+    public static void main(String[] args) {
+        String  s = "anagram", t = "nagaram";
+        System.out.println(isAnagram(s,t));
+        s = "rat";
+        t = "car";
+        System.out.println(isAnagram(s,t));
+    }
+}
+
+---------------------------------------------------------------------------------------------------
+4. 
+package q4;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+
+
+public class Q4 {
+    /**
+     * Given an array of integers arr,  the function that
+     * returns true if and only if the number of occurrences
+     * of each value in the array is unique.
+     *
+     * @param arr int[]
+     * @return boolean true or false
+     */
+    public static boolean uniqueOccurrences(int[] arr) {
+        HashMap<Integer, Integer> h = new HashMap<Integer, Integer>();
+        for (int i = 0; i < arr.length; i++) {
+            int item = arr[i];
+            if (h.keySet().contains(item)) {
+                h.put(item, h.get(item) + 1);
+            } else {
+                h.put(item, 1);
+            }
+        }
+        Collection<Integer> values = h.values();
+
+        //Creating an ArrayList of values
+        ArrayList<Integer> listOfValues = new ArrayList<Integer>(values);
+        for (int i = 0; i < listOfValues.size(); i++) {
+            for (int j = 0; j < listOfValues.size(); j++) {
+                if (i != j && listOfValues.get(i) == listOfValues.get(j)) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {1, 2, 2, 1, 1, 3};
+        System.out.println(uniqueOccurrences(arr));
+        int[] arr2 = {1, 2};
+        System.out.println(uniqueOccurrences(arr2));
+        int[] arr3 = {-3, 0, 1, -3, 1, 1, 1, -3, 10, 0};
+        System.out.println(uniqueOccurrences(arr3));
+    }
+}
+
+
+---------------------------------------------------------------------------------------------------
+5. 
+package q5;
+
+import java.util.ArrayList;
+
+/**
+ * MyHashMap class.
+ */
+public class MyHashMap {
+
+    // variable
+    private int size;
+    private Object[] table;
+    private int initSize;
+
+    /**
+     * constructor
+     */
+    public MyHashMap() {
+        // All keys and values will be in the range of [0, 1000000].
+        initSize = 1000002;
+        table = new Object[initSize];
+    }
+
+
+    /**
+     * clear the hash map.
+     */
+    public void clear() {
+        table = new Object[initSize];
+
+    }
+
+    /**
+     * judge the hash map contains the key or not.
+     *
+     * @param key int
+     * @return bool contain the key or not
+     */
+    public boolean containsKey(int key) {
+        return get(key) != -1;
+    }
+
+
+    /**
+     * Returns the value to which the specified key is mapped,
+     * or -1 if this map contains no mapping for the key.
+     *
+     * @param key int
+     * @return value int
+     */
+    public Integer get(int key) {
+        //choose bin
+        int index = getBucket(key, table);
+        if (table[index] == null) {
+            return -1;
+        } else {
+            ArrayList<Entry> list = ((ArrayList<Entry>) table[index]);
+            int listIndex = list.indexOf(new Entry(key, null));
+            if (listIndex == -1)
+                return -1;
+            Entry entry = list.get(listIndex);
+            return entry.getValue();
+        }
+    }
+
+    /**
+     * return the size of the hash map.
+     *
+     * @return fillCount int
+     */
+    public int size() {
+        return size;
+    }
+
+    /**
+     * Insert a (key, value) pair into the HashMap.
+     * If the value already exists in the HashMap,
+     * update the value.
+     *
+     * @param key   int
+     * @param value int
+     */
+    public void put(int key, int value) {
+        //create Entry
+        Entry entry = new Entry(key, value);
+
+        //choose bin
+        int index = getBucket(key, table);
+
+        addEntryToBucket(table, entry, index);
+    }
+
+    /**
+     * get the bucket in the hashmap
+     *
+     * @param key   Integer
+     * @param table Object[]
+     * @return index  int
+     */
+    private int getBucket(Integer key, Object[] table) {
+        int index = key.hashCode() % table.length;
+        return index;
+    }
+
+    /**
+     * add entry to bucket
+     *
+     * @param table Object[] table
+     * @param entry Entry
+     * @param index int
+     */
+    private void addEntryToBucket(Object[] table, Entry entry, int index) {
+        ArrayList<Entry> list;
+        if (table[index] == null) {
+            list = new ArrayList<Entry>();
+            list.add(entry);
+            size += 1;
+            table[index] = list;
+        } else {
+            list = ((ArrayList<Entry>) table[index]);
+            if (!list.contains(entry)) {
+                list.add(entry);
+                size += 1;
+            } else {
+                for (Entry item : list) {
+                    if (item.getKey() == entry.getKey()) {
+                        item.setValue(entry.getValue());
+                    }
+                }
+                table[index] = list;
+            }
+        }
+    }
+
+
+    /**
+     * Remove the mapping for the value key if this
+     * map contains the mapping for the key.
+     *
+     * @param key int
+     * @return value Integer
+     */
+    public Integer remove(int key) {
+        if (containsKey(key)) {
+            int index = getBucket(key, table);
+            ArrayList<Entry> list = ((ArrayList<Entry>) table[index]);
+            int listIndex = list.indexOf(new Entry(key, get(key)));
+            if (listIndex == -1)
+                return null;
+
+            Entry entry = list.remove(listIndex);
+            size -= 1;
+            return entry.getValue();
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Entry class.
+     */
+    private class Entry {
+        // variables
+        Integer key;
+        Integer value;
+
+        /**
+         * constructor
+         *
+         * @param key   Integer
+         * @param value Integer
+         */
+        public Entry(Integer key, Integer value) {
+            this.key = key;
+            this.value = value;
+        }
+
+        /**
+         * get the value of key.
+         *
+         * @return key int
+         */
+        public int getKey() {
+            return key;
+        }
+
+        /**
+         * get the value of value.
+         *
+         * @return value int
+         */
+        public int getValue() {
+            return value;
+        }
+
+        /**
+         * set the value of key.
+         *
+         * @param key int
+         */
+        public void setKey(Integer key) {
+            this.key = key;
+        }
+
+        /**
+         * set the value of value.
+         *
+         * @param value int
+         */
+        public void setValue(Integer value) {
+            this.value = value;
+        }
+
+        /**
+         * equal if and only if the key is equal to the key of Object o.
+         *
+         * @param o Object
+         * @return boolean true or false
+         */
+        public boolean equals(Object o) {
+            if (o != null && o instanceof MyHashMap.Entry) {
+                @SuppressWarnings("unchecked")
+                Entry other = (Entry) o;
+                return this.getKey() == other.getKey();
+            }
+            return false;
+        }
+
+        /**
+         * to String funciton <key,value>
+         *
+         * @return s String
+         */
+        public String toString() {
+            return "<" + key.toString() + ", " + value.toString() + ">";
+        }
+    }
+
+    /**
+     * main funciton.
+     *
+     * @param args String[]
+     */
+    public static void main(String[] args) {
+        MyHashMap hashMap = new MyHashMap();
+        hashMap.put(1, 1);
+        hashMap.put(2, 2);
+        System.out.println(hashMap.get(1));          // returns 1
+        System.out.println(hashMap.get(3));            // returns -1 (not found)
+        hashMap.put(2, 1);          // update the existing value
+        System.out.println(hashMap.get(2));            // returns 1
+        System.out.println(hashMap.remove(2));          // remove the mapping for 2
+        System.out.println(hashMap.get(2));            // returns -1 (not found)
+    }
+}
+
