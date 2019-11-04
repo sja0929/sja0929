@@ -1,0 +1,411 @@
+Q1
+package q1;
+
+import java.io.*;
+
+/**
+ * @program: Assignment 7
+ * @filename: FileUtil
+ * @description: read file
+ * @author:
+ * @create: 2019-11-02
+ **/
+public class FileUtil {
+    /**
+     * read file
+     *
+     * @param FILENAME String
+     * @return filecontent String
+     * @throws IOException exception
+     */
+    public static String readfile(String FILENAME) throws IOException {
+        BufferedReader br = null;
+        FileReader fr = null;
+        String result = "";
+        try {
+
+            fr = new FileReader(FILENAME);
+            br = new BufferedReader(fr);
+            String sCurrentLine;
+
+            br = new BufferedReader(new FileReader(FILENAME));
+            while ((sCurrentLine = br.readLine()) != null) {
+                result += sCurrentLine;
+            }
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (br != null) {
+                    br.close();
+                }
+
+                if (fr != null)
+                    fr.close();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+
+        }
+        return result;
+    }
+
+    /**
+     * write to file
+     *
+     * @param FILENAME String
+     * @param content  String
+     */
+    public static void writefile(String FILENAME, String content) {
+
+        BufferedWriter bw = null;
+        FileWriter fw = null;
+        try {
+            fw = new FileWriter(FILENAME, false);
+            bw = new BufferedWriter(fw);
+            bw.write(content);
+        } catch (IOException e) {
+
+            e.printStackTrace();
+        } finally {
+
+            try {
+
+                if (bw != null)
+                    bw.close();
+
+                if (fw != null)
+                    fw.close();
+
+            } catch (IOException e) {
+
+                e.printStackTrace();
+            }
+        }
+
+    }
+}
+
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+
+/**
+ * @program: Assignment 7
+ * @filename: LineCounts
+ * @description: q1
+ * @author:
+ * @create: 2019-11-02
+ **/
+public class Main {
+    /**
+     * main function
+     *
+     * @param args String[]
+     * @throws IOException exception
+     */
+    public static void main(String[] args) throws IOException {
+        String filename = "q1_input.txt";
+        // read file
+        String content = FileUtil.readfile(filename);
+        System.out.println("Input file: " + content + ".");
+        List<String> words = Arrays.asList(content.split(" "));
+        String result = "";
+        // reverse the list
+        for (int i = words.size() - 1; i >= 0; i--) {
+            result += words.get(i);
+            if (i != 0) {
+                result += " ";
+            }
+        }
+        result += ".";
+        // write to file
+        FileUtil.writefile("q1_output.txt", result);
+        System.out.println("Output file: " + result);
+
+    }
+}
+
+------------------------------------------------------------
+Q2
+public class FileUtil {
+    /**
+     * read file
+     *
+     * @param FILENAME String
+     * @return filecontent String
+     * @throws IOException exception
+     */
+    public static String readfile(String FILENAME) throws IOException {
+        BufferedReader br = null;
+        FileReader fr = null;
+        String result = "";
+        try {
+
+            fr = new FileReader(FILENAME);
+            br = new BufferedReader(fr);
+            String sCurrentLine;
+
+            br = new BufferedReader(new FileReader(FILENAME));
+            while ((sCurrentLine = br.readLine()) != null) {
+                result += sCurrentLine;
+            }
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (br != null) {
+                    br.close();
+                }
+
+                if (fr != null)
+                    fr.close();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+
+        }
+        return result;
+    }
+
+    /**
+     * write to file
+     *
+     * @param FILENAME String
+     * @param content  String
+     */
+    public static void writefile(String FILENAME, String content) {
+
+        BufferedWriter bw = null;
+        FileWriter fw = null;
+        try {
+            fw = new FileWriter(FILENAME, false);
+            bw = new BufferedWriter(fw);
+            bw.write(content);
+        } catch (IOException e) {
+
+            e.printStackTrace();
+        } finally {
+
+            try {
+
+                if (bw != null)
+                    bw.close();
+
+                if (fw != null)
+                    fw.close();
+
+            } catch (IOException e) {
+
+                e.printStackTrace();
+            }
+        }
+
+    }
+}
+
+import java.io.IOException;
+import java.util.Stack;
+
+/**
+ * @program: Assignment 7
+ * @filename: LineCounts
+ * @description: q2
+ * @author:
+ * @create: 2019-11-02
+ **/
+public class Main {
+    /**
+     * main function
+     * @param args  String[]
+     * @throws IOException exception
+     */
+    public static void main(String[] args) throws IOException {
+        // read file
+        String s = FileUtil.readfile("q2_input3.txt");
+        System.out.print("Input file: \"" + s + "\", ");
+        //initial stack
+        Stack<StringBuilder> str = new Stack<>();
+        Stack<Integer> nums = new Stack<>();
+        StringBuilder res = new StringBuilder();
+        int num = 0;
+        for (char c : s.toCharArray()) {//Recursive string
+            if (c == '[') {
+                str.push(res);//push into stack
+                nums.push(num);
+                num = 0;//refresh numã€�res
+                res = new StringBuilder();
+            } else if (c == ']') {
+                StringBuilder tmp = new StringBuilder();
+                for (int i = nums.pop(); i > 0; i--)
+                    tmp.append(res);//res*3
+                res = str.pop().append(tmp);
+            } else if (c >= '0' && c <= '9') {
+                num = num * 10 + (c - '0');//Count the number of repetitions
+            } else {
+                res.append(c);
+            }
+        }
+        String result= res.toString();
+        FileUtil.writefile("q2_output3.txt", result);
+        System.out.println("output file: \"" + result + "\".");
+    }
+}
+
+-------------------------------------------------------
+Q3
+package q3;
+
+import java.io.*;
+
+/**
+ * @program: Assignment 7
+ * @filename: FileUtil
+ * @description: read file
+ * @author:
+ * @create: 2019-11-02
+ **/
+public class FileUtil {
+    /**
+     * read file and return linenum
+     *
+     * @param FILENAME String
+     * @return linenum int
+     * @throws IOException exception
+     */
+    public static int readfileline(String FILENAME) throws IOException {
+        BufferedReader br = null;
+        FileReader fr = null;
+        int lineNum = 0;
+        String result = "";
+
+        fr = new FileReader(FILENAME);
+        br = new BufferedReader(fr);
+        String sCurrentLine;
+
+        br = new BufferedReader(new FileReader(FILENAME));
+        while ((sCurrentLine = br.readLine()) != null) {
+            lineNum++;
+        }
+
+        return lineNum;
+    }
+}
+
+import java.io.IOException;
+
+/**
+ * @program: Assignment 7
+ * @filename: q3
+ * @description:
+ * @author:
+ * @create: 2019-11-02
+ **/
+public class LineCounts {
+    /**
+     * main function
+     * @param args  String[]
+     */
+    public static void main(String[] args){
+        int line = 0;
+        for(int i =0 ;i < args.length; i++){
+            String fileName = args[i];
+            try {
+                int temp = FileUtil.readfileline(fileName);
+                line+=temp;
+                System.out.println(fileName + " lineNum: " + temp);
+            } catch (Exception e) {
+                System.out.println(fileName + " Error: ");
+                e.printStackTrace();
+            }
+        }
+        System.out.println("total line: "+ line);
+    }
+
+}
+
+---------------------------------------------------------
+Q4
+package q4;
+
+import java.util.Random;
+
+/**
+ * @program: Assignment 7
+ * @filename: SumValue
+ * @description:
+ * @author:
+ * @create: 2019-11-02
+ **/
+public class SumValue {
+    /*generate array of random numbers*/
+    static void generateRandomArray(int[] arr) {
+        Random random = new Random();
+        for (int i = 0; i < arr.length; i++) {
+            int num = random.nextInt(1000);
+            arr[i] = num;
+        }
+    }
+
+    /*get sum of an array using 4 threads*/
+    static long sum(int[] array) {
+        final RuntimeData rd = new RuntimeData();
+        // thread number = 4
+        int threadCount = 4;
+        //Number of array elements calculated per thread
+        final int lenPerThread = array.length / threadCount;
+        for (int i = 0; i < threadCount; i++) {
+            final int index = i;
+            new Thread() {
+                @Override
+                public void run() {
+                    long s = 0;
+                    int start = index * lenPerThread;
+                    int end;
+                    if (index != threadCount - 1)
+                        end = start + lenPerThread;
+                    // last thread
+                    else
+                        end = array.length;
+                    for (int j = start; j < end; j++) {
+                        s += array[j];
+                    }
+                    synchronized (rd) {
+                        rd.sum += s;
+                    }
+                };
+            }.start();
+        }
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return rd.sum;
+    }
+
+    static class RuntimeData {
+        // save sum
+        long sum;
+    }
+
+    /**
+     * main function
+     * @param args String[] args
+     */
+    public static void main(String[] args) {
+        int[] arr = new int[4000000];
+        generateRandomArray(arr);
+        long sum = sum(arr);
+        System.out.println("Sum with 4 threads: " + sum);
+
+        long sum2 = 0;
+        for(int i =0; i < arr.length; i++){
+            sum2+=arr[i];
+        }
+        System.out.println("Sum with 1 threads: " + sum2);
+
+    }
+}
